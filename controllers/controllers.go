@@ -1,11 +1,13 @@
 package controllers
 
 import (
+	"GolangAPIPractice/models"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"path"
+	"strconv"
 	"strings"
 )
 
@@ -36,5 +38,15 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 	defer avatarFile.Close()
 	defer saveFile.Close()
 	//
+	// var u models.User
+	validAge, err := strconv.Atoi(userAge)
+	u := &models.User{
+		Name:       userName,
+		Age:        validAge,
+		AvatarPath: handler.Filename,
+	}
+
+	models.CreateUserProfile(u)
+
 	w.Write([]byte("create user profile successfully"))
 }

@@ -127,7 +127,6 @@ func main() {
 	if err != nil {
 		fmt.Println("start server error", err)
 	}
-	fmt.Println("server started")
 	// http.HandleFunc("/createUser/", uploadHandle) // 上传
 	// http.HandleFunc("/uploaded/", showPicHandle)  //显示图片
 	// err := http.ListenAndServe(":3000", nil)
