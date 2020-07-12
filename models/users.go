@@ -29,13 +29,24 @@ func CreateUserProfile(u *User) int64 {
 	return insertID
 }
 
+func GetUserProfile(id int) User {
+	var user User
+	sql := "SELECT * FROM user WHERE id = ?"
+	err := db.QueryRow(sql, id).Scan(&user.Id, &user.Name, &user.Age, &user.AvatarPath)
+	if err != nil {
+		fmt.Println("query row error", err)
+		panic(err)
+	}
+	return user
+}
+
 func ListAllUsers() []User {
 	var users []User
 	sql := "SELECT * FROM user"
 	rows, err := db.Query(sql)
 	if err != nil {
 		fmt.Println("query error", err)
-		return nil
+		panic(err)
 	}
 	defer rows.Close()
 

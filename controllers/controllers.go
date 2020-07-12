@@ -10,6 +10,8 @@ import (
 	"path"
 	"strconv"
 	"strings"
+
+	"github.com/gorilla/mux"
 )
 
 func ListUsers(w http.ResponseWriter, r *http.Request) {
@@ -17,6 +19,18 @@ func ListUsers(w http.ResponseWriter, r *http.Request) {
 	resultData := make(map[string][]models.User)
 	resultData["data"] = usersInfo
 	err := json.NewEncoder(w).Encode(resultData)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+}
+
+func GetUserDetail(w http.ResponseWriter, r *http.Request) {
+	params := mux.Vars(r)
+	id := params["id"]
+	validId, _ := strconv.Atoi(id)
+	userDetail := models.GetUserProfile(validId)
+	err := json.NewEncoder(w).Encode(userDetail)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -45,13 +59,16 @@ func CreateUser(w http.ResponseWriter, r *http.Request) {
 
 	defer avatarFile.Close()
 	defer saveFile.Close()
-	//
-	// var u models.User
+
+	avatarURL := ""
+	if handler.Filename != "" {
+		avatarURL = fmt.Sprintf("http://localhost:3000/static/%s", handler.Filename)
+	}
 	validAge, err := strconv.Atoi(userAge)
 	u := &models.User{
 		Name:       userName,
 		Age:        validAge,
-		AvatarPath: handler.Filename,
+		AvatarPath: avatarURL,
 	}
 
 	models.CreateUserProfile(u)
