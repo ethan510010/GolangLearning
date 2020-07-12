@@ -2,6 +2,7 @@ package controllers
 
 import (
 	"GolangAPIPractice/models"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
@@ -12,7 +13,14 @@ import (
 )
 
 func ListUsers(w http.ResponseWriter, r *http.Request) {
-	fmt.Println("hi")
+	usersInfo := models.ListAllUsers()
+	resultData := make(map[string][]models.User)
+	resultData["data"] = usersInfo
+	err := json.NewEncoder(w).Encode(resultData)
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
 }
 
 func CreateUser(w http.ResponseWriter, r *http.Request) {
