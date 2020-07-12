@@ -1,7 +1,7 @@
 package routes
 
 import (
-	"GolangApiPractice/controllers"
+	"GolangAPIPractice/controllers"
 	"net/http"
 
 	"github.com/gorilla/mux"
